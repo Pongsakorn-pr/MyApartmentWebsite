@@ -9,7 +9,7 @@ namespace webapi.Model
     public class GoogleSheetsHelper
     {
         public SheetsService Service { get; set; }
-        const string APPLICATION_NAME = "GroceryStore";
+        const string APPLICATION_NAME = "BillDatabase";
         static readonly string[] Scopes = { SheetsService.Scope.Spreadsheets };
 
         public GoogleSheetsHelper()
@@ -30,7 +30,7 @@ namespace webapi.Model
         private GoogleCredential GetCredentialsFromFile()
         {
             GoogleCredential credential;
-            using (var stream = new FileStream("billapartment-78ba32f1b55b.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream("billapartment-13fe4d7ba0a1.json", FileMode.Open, FileAccess.Read))
             {
                 credential = GoogleCredential.FromStream(stream).CreateScoped(Scopes);
             }

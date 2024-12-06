@@ -31,9 +31,10 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
+            '^/api/Apartment': {
                 target: 'https://localhost:7054/',
-                secure: false
+                secure: false,
+                changeOrigin: true
             }
         },
         port: 5173,
@@ -43,4 +44,3 @@ export default defineConfig({
         }
     }
 })
-*/
