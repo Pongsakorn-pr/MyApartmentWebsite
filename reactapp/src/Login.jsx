@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -17,41 +18,33 @@ const LoginPage = () => {
         }
 
         setLoading(true);
+        const dataObj = {
+            username: username,
+            password: password
+        };
 
         try {
-            const response = await axios.post("https://localhost:7054/api/Login", {
-                username: "admin",
-                password: "admin"
-            }, {
+            const response = await axios.post("https://localhost:7054/api/Login", dataObj, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                }
+                },
+                withCredentials: true  // Enable this if you need to include cookies in the request
             });
-
-            if (!response.ok) {
-                const errorData = await response.json(); // Try to parse error response
-                setErrorMessage(errorData.message || 'Login failed.');
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            if (data.success) {
-                // Handle successful login (e.g., store token, redirect)
-                console.log('Login successful!');
-            } else {
-                setErrorMessage('Login failed.');
-            }
+            navigate('/data');
 
         } catch (error) {
-            setErrorMessage('An error occurred. Please try again later.');
-            console.error('Login error:', error);
-        } finally {
-            setLoading(false);
+            if (error.response) {
+                // Handle server-side errors
+                console.error('Server error:', error.response.data);
+            } else if (error.request) {
+                // Handle network errors
+                console.error('Network error:', error.request);
+            } else {
+                console.error('Request error:', error.message);
+            }
         }
     };
-
     return (
         <div style={styles.container}>
             <form onSubmit={handleLogin} style={styles.form}>
@@ -98,10 +91,14 @@ const styles = {
         padding: '20px',
         textAlign: 'center',
     },
+    error: {
+        color: 'red'
+    },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        width: '200px',
+        alignItems: 'center',
+        width: '200px'
     },
     inputGroup: {
         marginBottom: '15px',
@@ -113,22 +110,19 @@ const styles = {
         marginTop: '5px',
         borderRadius: '5px',
         border: '1px solid #ccc',
-    },
-    error: {
-        color: 'red',
-        fontSize: '14px',
-        marginBottom: '10px',
+        width: '200px'
     },
     button: {
+        marginTop: '5px',
         padding: '10px 20px',
         fontSize: '16px',
         backgroundColor: '#4CAF50',
-        color: 'green',
+        color: '#fff',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-        width: '200px',
-        marginLeft: '10px', // Corrected property name
-    }
-}
+        width: '100%',
+        marginLeft: '2.5px'
+    },
+};
 export default LoginPage;

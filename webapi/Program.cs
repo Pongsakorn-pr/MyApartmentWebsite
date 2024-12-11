@@ -11,29 +11,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<GoogleSheetsHelper>();
 
 // Enable CORS with a policy to allow requests from your React app
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowReactApp", policy =>
-    {
-        // Allow your React app (running on http://localhost:5173) to make requests to this API
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // Allows cookies if needed
-    });
-});
-
 var app = builder.Build();
 
 // Apply CORS policy to the app
 app.UseCors("AllowReactApp");
+app.Use(async (context, next) =>
+{
+    // Add custom headers
+    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+    context.Response.Headers.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
+    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+
+    // Proceed with the next middleware in the pipeline
+    await next.Invoke();
+});
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

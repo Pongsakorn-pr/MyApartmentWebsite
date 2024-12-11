@@ -7,7 +7,7 @@ namespace webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginController : Controller
+    public class LoginController : ControllerBase
     {
         [HttpPost]
         public IActionResult Post([FromBody] accountLogin account)
@@ -17,7 +17,7 @@ namespace webapi.Controllers
                 if (account.username == "admin" && account.password == "admin") // Replace with secure password verification
                 {
                     //testttt
-                    return Ok("test");
+                    return Ok(new { message = "Login successful" });
                 }
                 else
                 {

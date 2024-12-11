@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
@@ -31,13 +30,13 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/api/Apartment': {
-                target: 'https://localhost:7054/',
-                secure: false,
-                changeOrigin: true
+            '/api': {
+                target: 'https://localhost:7054', // Change to your API server
+                secure: false, // Set to true if your API uses HTTPS
+                changeOrigin: true, // Set to true to handle CORS issues
             }
         },
-        port: 5173,
+        port: 5173, // Your React app's port
         https: {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),

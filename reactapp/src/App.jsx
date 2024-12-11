@@ -1,58 +1,19 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from './Login'; // Your LoginPage component
+import DataPage from './data'; // Your DataPage component
 
 export default class App extends Component {
     static displayName = App.name;
-    /*
-    constructor(props) {
-        super(props);
-        this.state = { forecasts: [], loading: true };
-    }
-    
-    componentDidMount() {
-        this.populateWeatherData();
-    }
-
-    static renderForecastsTable(forecasts) {
-        return (
-            
-            <table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {forecasts.map(forecast =>
-                        <tr key={forecast.date}>
-                            <td>{forecast.date}</td>
-                            <td>{forecast.temperatureC}</td>
-                            <td>{forecast.temperatureF}</td>
-                            <td>{forecast.summary}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-            
-        );
-    }*/
 
     render() {
         return (
-            <div>
-                <h1 id="tabelLabel" >Weather forecast</h1>
-                <p>This component demonstrates fetching data from the server.</p>
-            </div>
+            <Router> {/* Wrap the app with Router */}
+                <Routes>
+                    <Route path="/" element={<LoginPage />} /> {/* Home route for LoginPage */}
+                    <Route path="/data" element={<DataPage />} /> {/* Data page route */}
+                </Routes>
+            </Router>
         );
     }
 }
-  /*
-    async populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        this.setState({ forecasts: data, loading: false });
-    }
-    
-}*/

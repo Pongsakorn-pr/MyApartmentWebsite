@@ -35,7 +35,7 @@ public class ApartmentController : ControllerBase
     [HttpGet("{rowId}")]
     public IActionResult Get(int rowId)
     {
-        var range = $"{SHEET_NAME}!A{rowId}:D{rowId}";
+        var range = $"{SHEET_NAME}!A{rowId}:M{rowId}";
         var request = _googleSheetValues.Get(SPREADSHEET_ID, range);
         var response = request.Execute();
         var values = response.Values;
@@ -46,7 +46,7 @@ public class ApartmentController : ControllerBase
     [HttpPost]
     public IActionResult Post(Apartment item)
     {
-        var range = $"{SHEET_NAME}!A:D";
+        var range = $"{SHEET_NAME}!A:M";
         var valueRange = new ValueRange
         {
             Values = ItemsMapper.MapToRangeData(item)
@@ -62,7 +62,7 @@ public class ApartmentController : ControllerBase
     [HttpPut("{rowId}")]
     public IActionResult Put(int rowId, Apartment item)
     {
-        var range = $"{SHEET_NAME}!A{rowId}:D{rowId}";
+        var range = $"{SHEET_NAME}!A{rowId}:M{rowId}";
         var valueRange = new ValueRange
         {
             Values = ItemsMapper.MapToRangeData(item)
@@ -78,7 +78,7 @@ public class ApartmentController : ControllerBase
     [HttpDelete("{rowId}")]
     public IActionResult Delete(int rowId)
     {
-        var range = $"{SHEET_NAME}!A{rowId}:D{rowId}";
+        var range = $"{SHEET_NAME}!A{rowId}:M{rowId}";
         var requestBody = new ClearValuesRequest();
 
         var deleteRequest = _googleSheetValues.Clear(requestBody, SPREADSHEET_ID, range);
