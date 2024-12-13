@@ -109,7 +109,6 @@ const styles = {
         marginTop: '5px',
         borderRadius: '5px',
         border: '1px solid #ccc',
-        width: '200px'
     },
     button: {
         marginTop: '5px',

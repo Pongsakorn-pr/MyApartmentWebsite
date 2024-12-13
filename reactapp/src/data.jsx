@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Button, Table } from 'react-bootstrap';
-import { PencilSquare, Trash, Printer } from 'react-bootstrap-icons';
+import { PencilSquare, Trash, Printer, HouseAdd } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 const DataPage = () => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
+    const [count, setCount] = useState(0);
     const navigate = useNavigate();
     const deleteData = async (item) => {
         try {
@@ -15,13 +17,18 @@ const DataPage = () => {
             await axios.delete(`https://localhost:7054/api/Apartment/${id}`);
             console.log("Data Deleted:", item);
             // Update UI/state in the parent component (e.g., remove the deleted item from the list)
-            // You can achieve this by passing a function to the deleteData function 
+            // You can achieve this by passing a function to the deleteData function
             // to update the state in the parent component.
+            window.location.reload();
         } catch (error) {
             console.error("Error deleting data:", error);
             // Display an error message to the user 
         }
     };
+    const NavAddData = (count) => {
+        console.log(count);
+        navigate('/AddData', { state: {data : count } });
+    }
     const handleEdit = (item) => {
         console.log(item);
         navigate(`/Edit/${item.bill_id}`, { state: { data: item } });
@@ -37,7 +44,8 @@ const DataPage = () => {
                 return response.json();
             })
             .then((data) => {
-                setData(data); // Set the data in the state
+                setCount(data[1]);
+                setData(data[0]); // Set the data in the state
             })
             .catch((error) => {
                 setError(error.message); // Handle errors
@@ -46,8 +54,15 @@ const DataPage = () => {
 
     return (
         <div className="container mt-4">
-            <h1 className="mb-4">ข้อมูลหอพักทั้งหมด</h1>
-            {error && <div className="alert alert-danger">{error}</div>} {/* Display error message */}
+            <div className="d-flex justify-content-between mb-4">
+                <h1>ข้อมูลหอพักทั้งหมด</h1>
+                <Button variant="success"
+                    type="submit"
+                    className="me-2"
+                    size="lg"
+                    alt= "Add Data"
+                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => NavAddData(count)}><HouseAdd /></Button>
+            </div>
 
             <Table striped bordered hover responsive >
                 <thead className="table-dark" >
@@ -70,18 +85,18 @@ const DataPage = () => {
                 <tbody>
                     {data.map((item, rowIndex) => (
                         <tr key={rowIndex}>
-                            <td>{item.bill_id}</td>
-                            <td>{item.room_number}</td>
-                            <td>{item.month}/{item.year}</td>
-                            <td>{item.room_rent}</td>
-                            <td>{item.previous_meter_month}</td>
-                            <td>{item.water_reading_meter}</td>
-                            <td>{item.water_diff}</td>
-                            <td>{item.water_unit_fees}</td>
-                            <td>{item.garbage_fees}</td>
-                            <td>{item.other_fees}</td>
-                            <td>{item.total_amount}</td>
-                            <td><Button variant="primary" size ="lg" ><Printer /></Button></td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.bill_id}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.room_number}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.month}/{item.year}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.room_rent}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.previous_meter_month}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.water_reading_meter}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.water_diff}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.water_unit_fees}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.garbage_fees}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.other_fees}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.total_amount}</td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}><Button variant="primary" size ="lg" ><Printer /></Button></td>
                             <td>
                                 <div style={{ display: 'flex', justifyContent: 'center' }}> {/* Center buttons horizontally */}
                                     <Button

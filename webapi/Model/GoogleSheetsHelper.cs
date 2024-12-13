@@ -52,7 +52,7 @@ namespace webapi.Model
 
             foreach (var value in values)
             {
-                Apartment item = new();
+                Apartment item = new Apartment();
 
                 // Robust parsing with error handling
                 if (!int.TryParse(value[0]?.ToString(), out int billId))
@@ -60,7 +60,7 @@ namespace webapi.Model
                     continue; // Or skip this item
                 }
                 item.bill_id = billId;
-                item.bill_month_year = DateTime.ParseExact(value[2]?.ToString().Replace('/','-') ?? string.Empty, "dd-MM-yyyy", thaiCulture);
+                item.bill_month_year = !string.IsNullOrEmpty(value[2].ToString()) ? value[2].ToString() : string.Empty;
                 item.room_number = value[1]?.ToString() ?? string.Empty; // Handle null or empty values
                 item.room_rent = !string.IsNullOrEmpty(value[3]?.ToString())? Decimal.Parse(value[3].ToString()) : 0;
                 item.water_reading_meter = !string.IsNullOrEmpty(value[4]?.ToString()) ? int.Parse(value[4].ToString()) : 0;

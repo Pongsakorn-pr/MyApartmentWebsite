@@ -1,19 +1,19 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'; // Import for routing
+import { Navbar, Container, Nav } from 'react-bootstrap';
 
-const Navbar = () => {
+const Mynavbar = () => {
     return (
-        <nav className="navbar">
-            <ul>
-                <li>
-                    <NavLink to="/">Login</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/data">Data</NavLink>
-                </li>
-            </ul>
-        </nav>
+        <Navbar bg="light" expand="lg">
+            <Container>
+                <Navbar.Brand href="/">My App</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="me-auto">
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
     );
 };
 
-export default Navbar;
+export default Mynavbar;
