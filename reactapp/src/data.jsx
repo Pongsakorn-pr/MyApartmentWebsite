@@ -122,7 +122,7 @@ const DataPage = () => {
                             <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.garbage_fees}</td>
                             <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.other_fees}</td>
                             <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.total_amount}</td>
-                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}><Button variant="primary" size="lg" onClick={() => downloadPdf(item)}><Printer /></Button></td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}><Button variant="primary" size="lg" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}  onClick={() => downloadPdf(item)}><Printer /></Button></td>
                             <td>
                                 <div style={{ display: 'flex', justifyContent: 'center' }}> {/* Center buttons horizontally */}
                                     <Button
