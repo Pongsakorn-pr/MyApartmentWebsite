@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const LoginPage = () => {
+
+const LoginPage = ({ onLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -31,20 +32,25 @@ const LoginPage = () => {
                 },
                 withCredentials: true  // Enable this if you need to include cookies in the request
             });
-            navigate('/data');
+
+            // Login was successful, update parent state and redirect
+            onLogin();  // Call the onLogin function from parent component to update the state
+            localStorage.setItem('isAuthenticated', 'true'); // Store authentication status in localStorage
+            navigate('/data');  // Redirect to /data page after login
 
         } catch (error) {
             if (error.response) {
-                // Handle server-side errors
-                console.error('Server error:', error.response.data);
+                setErrorMessage('Server error: ' + error.response.data);
             } else if (error.request) {
-                // Handle network errors
-                console.error('Network error:', error.request);
+                setErrorMessage('Network error: Please try again later.');
             } else {
-                console.error('Request error:', error.message);
+                setErrorMessage('Request error: ' + error.message);
             }
+        } finally {
+            setLoading(false);
         }
     };
+
     return (
         <div style={styles.container}>
             <form onSubmit={handleLogin} style={styles.form}>
@@ -123,4 +129,5 @@ const styles = {
         marginLeft: '2.5px'
     },
 };
+
 export default LoginPage;
