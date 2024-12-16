@@ -22,6 +22,8 @@ const AddDataPage = () => {
         total_amount: 0,
         Month: currentDate.getMonth() + 1,
         Year: currentDate.getFullYear(),
+        BAHT: '',
+        Month_TH: ''
     };
     const [formData, setFormData] = useState(DefaultDataObject);
     const backPage = () => {
@@ -46,11 +48,15 @@ const AddDataPage = () => {
                 };
                 console.log(dataObj);
                 const respon = await axios.post(`https://localhost:7054/api/Apartment/oldMeter`, dataObj);
-
+                console.log(respon);
                 if (respon.status === 200) { // Check the response status
-                    var newWater = respon.data[0].water_reading_meter;
+                    var newWater = 0;
+                    if (respon.data.length > 0) {
+                        newWater = respon.data[0].water_reading_meter;
+                    }
                     formData.previous_meter_month = newWater;
                     formData.bill_month_year = currentDate.toLocaleDateString('en-GB');
+                    console.log("Finished");
                     setdis(false);
                 } else {
                     console.error("Error in response:", respon);
@@ -85,6 +91,9 @@ const AddDataPage = () => {
     };
     const sumbitAddata = async (item) => {
         try {
+            item.BAHT = '=BAHTTEXT(' + item.total_amount + ')';
+            item.Month_TH = '=TEXT((' + item.bill_month_year + '), "MMMM") & " " & TEXT(' + (item.Year+543) + ', "0")';
+            console.log(item);
             const respon = await axios.post(`https://localhost:7054/api/Apartment`, item);
             if (respon.ok) {
                 console.log("Successful");
@@ -102,7 +111,7 @@ const AddDataPage = () => {
                     <Form.Control
                         type="text"
                         name="bill_id"
-                        value={formData.bill_id}
+                        value={formData.bill_id || 1}
                         onChange={handleChange}
                         disabled
                     />

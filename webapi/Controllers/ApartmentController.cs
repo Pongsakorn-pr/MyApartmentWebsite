@@ -15,7 +15,7 @@ namespace webapi.Controllers;
 [ApiController]
 public class ApartmentController : ControllerBase
 {
-    const string SPREADSHEET_ID = "1jtM2ZAhEo8SGTQEKIRJbNbPF49JYDXriiQll-2Sx4Bg";
+    const string SPREADSHEET_ID = "1CpeyKGh-l8BsvyTTsJALb8Im0jTt91uW-9KT9328T2M";
     const string SHEET_NAME = "Bill";
 
     SpreadsheetsResource.ValuesResource _googleSheetValues;
@@ -28,7 +28,7 @@ public class ApartmentController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var range = $"{SHEET_NAME}!A:M";
+        var range = $"{SHEET_NAME}!A:O";
         var request = _googleSheetValues.Get(SPREADSHEET_ID, range);
         var response = request.Execute();
         var values = response.Values;
@@ -42,7 +42,7 @@ public class ApartmentController : ControllerBase
     [HttpGet("{rowId}")]
     public IActionResult Get(int rowId)
     {
-        var range = $"{SHEET_NAME}!A{rowId}:M{rowId}";
+        var range = $"{SHEET_NAME}!A{rowId}:O{rowId}";
         var request = _googleSheetValues.Get(SPREADSHEET_ID, range);
         var response = request.Execute();
         var values = response.Values;
@@ -52,7 +52,7 @@ public class ApartmentController : ControllerBase
     [HttpPost("oldMeter")]
     public IActionResult Post([FromBody] MeterRequest reqData)
     {
-        var range = $"{SHEET_NAME}!A:M";
+        var range = $"{SHEET_NAME}!A:O";
         var request = _googleSheetValues.Get(SPREADSHEET_ID, range);
         var response = request.Execute();
         var values = response.Values;
@@ -64,7 +64,7 @@ public class ApartmentController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] Apartment item)
     {
-        var range = $"{SHEET_NAME}!A:M";
+        var range = $"{SHEET_NAME}!A:O";
         /*
         Apartment item = new Apartment
         {
@@ -82,6 +82,7 @@ public class ApartmentController : ControllerBase
             Month = jsonDynamic.Month.Value,
             Year = jsonDynamic.Year.Value
         };*/
+        // item.BAHT = BahtTextConverter.ConvertToBahtText(Convert.ToDecimal(item.BAHT));
         var valueRange = new ValueRange
         {
             Values = ItemsMapper.MapToRangeData(item)
@@ -93,10 +94,37 @@ public class ApartmentController : ControllerBase
 
         return CreatedAtAction(nameof(Get), item);
     }
-    [HttpPut("{rowId}")]
+    public class rowRequest
+    {
+        public int rowIndex { get; set; }
+    }
+    [HttpPost("PdfBill")]
+    public IActionResult Print([FromBody] rowRequest rowIndex)
+    {
+        int rowId = rowIndex.rowIndex + 1 ;
+        var range = $"{SHEET_NAME}!A{rowId}:O{rowId}";
+        var request = _googleSheetValues.Get(SPREADSHEET_ID, range);
+        var response = request.Execute();
+        var values = response.Values;
+        Apartment item = ItemsMapper.MapFromRangeData(values).FirstOrDefault();
+        // Create a MemoryStream to hold the generated PDF data
+        try
+        {
+            BillAparment billAparment = new BillAparment();
+            byte[] pdfBytes = billAparment.PrintBillPdf(item);
+
+            // Return the PDF file as a response
+            return File(pdfBytes, "application/pdf", $"Bill_{item.bill_id}.pdf");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+[HttpPut("{rowId}")]
     public IActionResult Put(int rowId, Apartment item)
     {
-        var range = $"{SHEET_NAME}!A{rowId}:M{rowId}";
+        var range = $"{SHEET_NAME}!A{rowId}:O{rowId}";
         var valueRange = new ValueRange
         {
             Values = ItemsMapper.MapToRangeData(item)
@@ -112,7 +140,7 @@ public class ApartmentController : ControllerBase
     [HttpDelete("{rowId}")]
     public IActionResult Delete(int rowId)
     {
-        var range = $"{SHEET_NAME}!A{rowId}:M{rowId}";
+        var range = $"{SHEET_NAME}!A{rowId}:O{rowId}";
         var requestBody = new ClearValuesRequest();
 
         var deleteRequest = _googleSheetValues.Clear(requestBody, SPREADSHEET_ID, range);

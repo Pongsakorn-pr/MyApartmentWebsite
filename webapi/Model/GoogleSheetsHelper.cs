@@ -72,6 +72,8 @@ namespace webapi.Model
                 item.total_amount = !string.IsNullOrEmpty(value[10]?.ToString()) ? Decimal.Parse(value[10].ToString())  : 0;
                 item.Month = !string.IsNullOrEmpty(value[11]?.ToString()) ? int.Parse(value[11].ToString()) : 0;
                 item.Year = !string.IsNullOrEmpty(value[12]?.ToString()) ? int.Parse(value[12].ToString()) : 0;
+                item.BAHT = value[13].ToString();
+                item.Month_TH = value[14].ToString();
                 items.Add(item);
             }
 
@@ -79,7 +81,7 @@ namespace webapi.Model
         }
         public static IList<IList<object>> MapToRangeData(Apartment item)
         {
-            var objectList = new List<object>() { item.bill_id, item.room_number, item.bill_month_year, item.room_rent, item.water_reading_meter, item.water_unit_fees, item.garbage_fees,item.other_fees,item.previous_meter_month,item.water_diff,item.total_amount,item.Month,item.Year };
+            var objectList = new List<object>() { item.bill_id, item.room_number, item.bill_month_year, item.room_rent, item.water_reading_meter, item.water_unit_fees, item.garbage_fees,item.other_fees,item.previous_meter_month,item.water_diff,item.total_amount,item.Month,item.Year,item.BAHT,item.Month_TH };
             var rangeData = new List<IList<object>> { objectList };
             return rangeData;
         }

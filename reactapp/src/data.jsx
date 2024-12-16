@@ -10,6 +10,26 @@ const DataPage = () => {
     const [error, setError] = useState(null);
     const [count, setCount] = useState(0);
     const navigate = useNavigate();
+    const downloadPdf = async (item) => {
+        var requestRowIndex = {
+            rowIndex: item.bill_id
+        };
+        axios.post('https://localhost:7054/api/Apartment/PdfBill', requestRowIndex, {
+            responseType: 'blob' // Important to handle binary data (PDF)
+        })
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+                const link = document.createElement('a');
+                var filename = item.month + '_' + item.year + '_Bill_' + item.room_number + '.pdf';
+                link.href = url;
+                link.setAttribute('download', filename); // Set the file name
+                document.body.appendChild(link);
+                link.click();
+            })
+            .catch(error => {
+                console.error('Error generating PDF:', error);
+            });
+    };
     const deleteData = async (item) => {
         try {
             // Use the actual ID of the item
@@ -44,8 +64,14 @@ const DataPage = () => {
                 return response.json();
             })
             .then((data) => {
-                setCount(data[1]);
-                setData(data[0]); // Set the data in the state
+                console.log(data);
+                if (data.length > 0) {
+                    setCount(data[1]);
+                    setData(data[0]); // Set the data in the state
+                }
+                else {
+                    setCount(0);
+                }
             })
             .catch((error) => {
                 setError(error.message); // Handle errors
@@ -96,7 +122,7 @@ const DataPage = () => {
                             <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.garbage_fees}</td>
                             <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.other_fees}</td>
                             <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}>{item.total_amount}</td>
-                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}><Button variant="primary" size ="lg" ><Printer /></Button></td>
+                            <td style={{ whiteSpace: 'nowrap', textAlign: 'center' }}><Button variant="primary" size="lg" onClick={() => downloadPdf(item)}><Printer /></Button></td>
                             <td>
                                 <div style={{ display: 'flex', justifyContent: 'center' }}> {/* Center buttons horizontally */}
                                     <Button

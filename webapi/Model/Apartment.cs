@@ -15,5 +15,7 @@
         public decimal total_amount { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }  
+        public string BAHT { get; set; }
+        public string Month_TH { get; set;}
     }
 }
