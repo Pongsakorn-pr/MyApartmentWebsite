@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeftSquare } from 'react-bootstrap-icons';
 const AddDataPage = () => {
     const { state } = useLocation(); // Get data passed from the previous page
@@ -235,9 +235,9 @@ const AddDataPage = () => {
                 {/* Add other fields as needed */}
                 <div style={{ marginTop: '20px' }}>
                     <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={() => sumbitAddata(formData)}>
-                        Add
+                        ADD
                     </Button>
-                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }} onClick={backPage}><ArrowLeftSquare /></Button>
+                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }} onClick={backPage}> <Link to="/" ><ArrowLeftSquare style={{ color: 'white' }} /></Link></Button>
                 </div>
             </Form>
         </div>

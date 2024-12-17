@@ -1,19 +1,33 @@
 import React from 'react';
 import './Navbar.css';
+import Button from 'react-bootstrap/Button'
+import { HouseGearFill } from 'react-bootstrap-icons'
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    const homePage = () => {
+        navigate('/data', { replace: true });
+    };
+    const logOut = () => {
+        localStorage.removeItem('isAuthenticated');
+        navigate('/', { replace: true });
+        window.location.reload();
+    };
     return (
         <nav className="navbar">
             {/* Left: Logo or Brand */}
             <div className="navbar-left">
-                <a href="/" className="brand">MyWebsite</a>
+                <Link to="/" className="brand">
+                    <HouseGearFill /> Properly Manage
+                </Link>
             </div>
 
             {/* Right: User Details */}
             <div className="navbar-right">
-                <span className="details">Welcome, John Doe</span>
-                <a href="/profile" className="btn">Profile</a>
-                <a href="/logout" className="btn btn-logout">Logout</a>
+                <Button variant="primary" onClick={homePage}>Home</Button>
+                <Button variant="danger" onClick={logOut}>Logout</Button>
             </div>
         </nav>
     );

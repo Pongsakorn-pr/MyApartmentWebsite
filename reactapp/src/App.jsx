@@ -35,6 +35,7 @@ export default class App extends Component {
         this.setState({ isAuthenticated: false });
         localStorage.removeItem('isAuthenticated'); // Remove from localStorage
         console.log("Logged out, authentication removed from localStorage.");
+        window.location.reload();
     };
 
     render() {
