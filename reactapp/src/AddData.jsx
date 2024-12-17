@@ -9,7 +9,7 @@ const AddDataPage = () => {
     const currentDate = new Date();
     const [dis, setdis] = useState(true);
     var DefaultDataObject = {
-        bill_id: 0,
+        bill_id: 1,
         room_number: '',
         bill_month_year: '',
         room_rent: 3500,

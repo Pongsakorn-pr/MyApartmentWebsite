@@ -4,6 +4,8 @@ import LoginPage from './Login'; // Your LoginPage component
 import DataPage from './Data'; // Your DataPage component
 import EditDataForm from './Edit'; // Your EditDataForm component
 import AddDataPage from './AddData'; // Your AddDataPage component
+import DashboardPage from './dashboard'; 
+import Navbar from './Navbar';
 
 export default class App extends Component {
     constructor(props) {
@@ -40,6 +42,8 @@ export default class App extends Component {
 
         return (
             <Router>
+                {isAuthenticated && <Navbar onLogout={this.handleLogout} />}
+
                 <Routes>
                     {/* Public Route: Login Page */}
                     <Route
@@ -84,6 +88,9 @@ export default class App extends Component {
                             )
                         }
                     />
+                    <Route
+                        path="/dashboard"
+                        element={<DashboardPage /> } />
                 </Routes>
             </Router>
         );

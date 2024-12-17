@@ -1,19 +1,22 @@
 import React from 'react';
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import './Navbar.css';
 
-const Mynavbar = () => {
+const Navbar = () => {
     return (
-        <Navbar bg="light" expand="lg">
-            <Container>
-                <Navbar.Brand href="/">My App</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+        <nav className="navbar">
+            {/* Left: Logo or Brand */}
+            <div className="navbar-left">
+                <a href="/" className="brand">MyWebsite</a>
+            </div>
+
+            {/* Right: User Details */}
+            <div className="navbar-right">
+                <span className="details">Welcome, John Doe</span>
+                <a href="/profile" className="btn">Profile</a>
+                <a href="/logout" className="btn btn-logout">Logout</a>
+            </div>
+        </nav>
     );
 };
 
-export default Mynavbar;
+export default Navbar;
