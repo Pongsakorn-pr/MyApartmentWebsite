@@ -1,9 +1,8 @@
 # Use the ASP.NET Core runtime as the base image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-# Expose port 80 (or any other port for your service) to the container
-EXPOSE 80
-EXPOSE 443
+# Expose port 5000 to match the port the app listens on
+EXPOSE 5000
 
 # Use the SDK image to build the application
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
@@ -23,5 +22,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Ensure the app listens on the correct port (defaulting to 5000 if not set)
 ENTRYPOINT ["dotnet", "webapi.dll"]
