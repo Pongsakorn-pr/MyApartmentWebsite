@@ -9,7 +9,11 @@ builder.Services.AddSwaggerGen();
 
 // Register GoogleSheetsHelper as a singleton.
 builder.Services.AddSingleton<GoogleSheetsHelper>();
-
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(int.Parse(port));  // Use the dynamic port
+});
 // Enable CORS with a policy to allow requests from your React app
 var app = builder.Build();
 
@@ -25,7 +29,6 @@ app.Use(async (context, next) =>
     // Proceed with the next middleware in the pipeline
     await next.Invoke();
 });
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
