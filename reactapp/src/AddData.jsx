@@ -235,7 +235,7 @@ const AddDataPage = () => {
                 {/* Add other fields as needed */}
                 <div style={{ marginTop: '20px' }}>
                     <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={() => sumbitAddata(formData)}>
-                        ADD
+                        Save
                     </Button>
                     <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }} onClick={backPage}> <Link to="/" ><ArrowLeftSquare style={{ color: 'white' }} /></Link></Button>
                 </div>

@@ -13,6 +13,7 @@ namespace webapi.Controllers
         public byte[] PrintBillPdf(Apartment item)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            string imgQrcodeUrl = @"https://drive.google.com/thumbnail?id=1TssFYH_nt4Zsl1uQVwCEtnxnDswbTDZJ&sz=w1000";
             using (var memoryStream = new MemoryStream())
             {
                 // Create a Document object
@@ -125,9 +126,15 @@ namespace webapi.Controllers
                     table.SpacingAfter = 20f;
                     document.Add(table);
 
-                    // Account Information
-                    Paragraph account = new Paragraph("ชื่อบัญชี: บาง ไพพร เหลืองชะนะ", normalFont) { Alignment = Element.ALIGN_CENTER };
-                    document.Add(account);
+                    // imageQRCode
+                    iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(imgQrcodeUrl);
+
+                    // Set image properties (optional)
+                    image.ScaleToFit(300f, 300f); // Scale the image to fit within 300x300 points
+                    image.Alignment = Element.ALIGN_CENTER; // Center the image
+                    image.SpacingBefore = 20f; // Add space before the image
+                    image.SpacingAfter = 20f; // Add space after the image
+                    document.Add(image);
 
                 }
                 catch (Exception ex)
