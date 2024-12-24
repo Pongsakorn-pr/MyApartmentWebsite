@@ -1,11 +1,16 @@
 using webapi.Model;
 
 var builder = WebApplication.CreateBuilder(args);
+/*
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-builder.WebHost.ConfigureKestrel(serverOptions =>
+if (builder.Environment.IsProduction())
 {
-    serverOptions.ListenAnyIP(int.Parse(port));  // Use the dynamic port
-});
+    builder.WebHost.ConfigureKestrel(serverOptions =>
+    {
+        serverOptions.ListenAnyIP(int.Parse(port)); // HTTP only
+    });
+}
+*/
 // Enable CORS with a policy to allow requests from your React app
 
 // Add services to the container.
@@ -18,7 +23,6 @@ builder.Services.AddSingleton<GoogleSheetsHelper>();
 var app = builder.Build();
 
 // Apply CORS policy to the app
-app.UseCors("AllowReactApp");
 app.Use(async (context, next) =>
 {
     // Add custom headers
@@ -33,9 +37,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    /*builder.WebHost.UseUrls("http://*:5000", "https://*:5001");*/
 }
-app.UseHttpsRedirection();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+app.UseCors("AllowReactApp");
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
