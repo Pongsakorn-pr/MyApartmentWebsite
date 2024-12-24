@@ -1,57 +1,64 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - ProperlyManageMentAPi
+name: Build and deploy WebAPI to Azure Web App
 
 on:
   push:
     branches:
-      - master
+      - main  # Trigger on pushes to the main branch
   workflow_dispatch:
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      # Set up .NET Core for WebAPI
+      - name: Set up .NET Core for WebAPI
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '8.x'  # Use the version your WebAPI is built with
           include-prerelease: true
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      # Build the WebAPI
+      - name: Build WebAPI with dotnet
+        run: |
+          cd WebAPI
+          dotnet build --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      # Publish the WebAPI
+      - name: Publish WebAPI
+        run: |
+          cd WebAPI
+          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
+      # Upload WebAPI artifact
+      - name: Upload WebAPI artifact
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
+          name: webapi-artifact
           path: ${{env.DOTNET_ROOT}}/myapp
 
-  deploy:
+  deploy_webapi:
     runs-on: windows-latest
-    needs: build
+    needs: build_and_deploy
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: ${{ steps.deploy-webapi.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
+      - name: Download WebAPI artifact
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: webapi-artifact
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      - name: Deploy WebAPI to Azure Web App
+        id: deploy-webapi
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'ProperlyManageMentAPi'
+          app-name: 'ProperlyManageMentAPi'  # Your Azure Web API App name
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CBF87B73E82346BB895E83F805AD367E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CBF87B73E82346BB895E83F805AD367E }}  # Secret for your publish profile
           package: .
