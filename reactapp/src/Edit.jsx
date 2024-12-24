@@ -39,7 +39,7 @@ const EditDataPage = () => {
         e.preventDefault();
         try {
             // Adjust the API URL as needed
-            await axios.put(`https://localhost:7054/api/Apartment/${formData.bill_id+1}`, formData);
+            await axios.put(`https://webapiforproperly.azurewebsites.net/api/Apartment/${formData.bill_id+1}`, formData);
             console.log("Data updated", formData);
             navigate('/data');  // Navigate back to the data list page after updating
         } catch (error) {

@@ -17,23 +17,9 @@ app.UseCors(policy =>
           .AllowAnyMethod();
 });
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, @"E:\Web\Solution1\reactapp\dist")),
-    RequestPath = ""
-});
-
-app.MapFallbackToFile("index.html", new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, @"E:\Web\Solution1\reactapp\dist"))
-});
-
-
+app.UseSwagger();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI();
 }
 

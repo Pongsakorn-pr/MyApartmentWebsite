@@ -25,7 +25,7 @@ const LoginPage = ({ onLogin }) => {
         };
 
         try {
-            const response = await axios.post("https://localhost:7054/api/Login", dataObj, {
+            const response = await axios.post("https://webapiforproperly.azurewebsites.net/api/Login", dataObj, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'

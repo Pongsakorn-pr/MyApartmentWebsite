@@ -14,7 +14,7 @@ const DataPage = () => {
         var requestRowIndex = {
             rowIndex: item.bill_id
         };
-        axios.post('https://localhost:7054/api/Apartment/PdfBill', requestRowIndex, {
+        axios.post('https://webapiforproperly.azurewebsites.net/api/Apartment/PdfBill', requestRowIndex, {
             responseType: 'blob' // Important to handle binary data (PDF)
         })
             .then(response => {
@@ -34,7 +34,7 @@ const DataPage = () => {
         try {
             // Use the actual ID of the item
             var id = item.bill_id + 1;
-            await axios.delete(`https://localhost:7054/api/Apartment/${id}`);
+            await axios.delete(`https://webapiforproperly.azurewebsites.net/api/Apartment/${id}`);
             console.log("Data Deleted:", item);
             // Update UI/state in the parent component (e.g., remove the deleted item from the list)
             // You can achieve this by passing a function to the deleteData function
@@ -56,7 +56,7 @@ const DataPage = () => {
     };
     useEffect(() => {
         // Fetch data from the backend API
-        fetch("https://localhost:7054/api/Apartment") // Adjust API URL accordingly
+        fetch("https://webapiforproperly.azurewebsites.net/api/Apartment") // Adjust API URL accordingly
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");

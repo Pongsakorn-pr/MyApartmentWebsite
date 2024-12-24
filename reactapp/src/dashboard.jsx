@@ -21,7 +21,7 @@ const DashboardPage = () => {
 
     useEffect(() => {
         // Fetch data from the backend API
-        fetch("https://localhost:7054/api/Apartment") // Adjust API URL accordingly
+        fetch("https://webapiforproperly.azurewebsites.net/api/Apartment") // Adjust API URL accordingly
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");

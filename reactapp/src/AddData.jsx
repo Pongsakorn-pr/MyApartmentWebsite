@@ -47,7 +47,7 @@ const AddDataPage = () => {
                     year: currentDate.getFullYear()
                 };
                 console.log(dataObj);
-                const respon = await axios.post(`https://localhost:7054/api/Apartment/oldMeter`, dataObj);
+                const respon = await axios.post(`https://webapiforproperly.azurewebsites.net/api/Apartment/oldMeter`, dataObj);
                 console.log(respon);
                 if (respon.status === 200) { // Check the response status
                     var newWater = 0;
@@ -94,7 +94,7 @@ const AddDataPage = () => {
             item.BAHT = '=BAHTTEXT(' + item.total_amount + ')';
             item.Month_TH = '=TEXT((' + item.bill_month_year + '), "MMMM") & " " & TEXT(' + (item.Year+543) + ', "0")';
             console.log(item);
-            const respon = await axios.post(`https://localhost:7054/api/Apartment`, item);
+            const respon = await axios.post(`https://webapiforproperly.azurewebsites.net/api/Apartment`, item);
             if (respon.ok) {
                 console.log("Successful");
             }
