@@ -7,7 +7,7 @@ EXPOSE 5000
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["webapi.csproj", "webapi/"]
-RUN dotnet restore "webapi.csproj"
+RUN dotnet restore "webapi/webapi.csproj"
 COPY . . 
 WORKDIR "/src/webapi"
 RUN dotnet build "webapi.csproj" -c Release -o /app/build
