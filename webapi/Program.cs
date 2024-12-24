@@ -1,27 +1,23 @@
 using webapi.Model;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<GoogleSheetsHelper>();
+builder.Services.AddSingleton<GoogleSheetsHelper>();  // Example of a singleton service
 
 var app = builder.Build();
 
-app.UseCors(policy =>
+// Apply CORS and other middleware
+app.UseCors("AllowReactApp");
+
+app.Use(async (context, next) =>
 {
-    policy.WithOrigins("http://localhost:3000") // Replace with your React app's URL during development
-          .AllowAnyHeader()
-          .AllowAnyMethod();
+    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+    context.Response.Headers.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
+    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+    await next.Invoke();
 });
-
-// Serve static files from wwwroot
-app.UseStaticFiles();
-
-// SPA fallback: Route unmatched requests to index.html
-app.MapFallbackToFile("index.html");
 
 if (app.Environment.IsDevelopment())
 {
