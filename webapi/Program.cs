@@ -1,46 +1,40 @@
 using webapi.Model;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Use the environment variable PORT if available, otherwise fallback to a default port.
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.ListenAnyIP(int.Parse(port));
+    serverOptions.ListenAnyIP(int.Parse(port));  // Listen on the dynamic port provided by Render
 });
 
-// Enable CORS with a policy to allow requests from your React app
-
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<GoogleSheetsHelper>();  // Example of a singleton service
 
-// Register GoogleSheetsHelper as a singleton.
-builder.Services.AddSingleton<GoogleSheetsHelper>();
 var app = builder.Build();
 
-// Apply CORS policy to the app
+// Apply CORS and other middleware
+app.UseCors("AllowReactApp");
+
 app.Use(async (context, next) =>
 {
-    // Add custom headers
     context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
     context.Response.Headers.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
     context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
-
-    // Proceed with the next middleware in the pipeline
     await next.Invoke();
 });
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    /*builder.WebHost.UseUrls("http://*:5000", "https://*:5001");*/
 }
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-app.UseCors("AllowReactApp");
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();

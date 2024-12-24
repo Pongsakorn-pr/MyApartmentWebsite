@@ -1,3 +1,4 @@
+/*
 {
   "profiles": {
     "http": {
@@ -46,6 +47,21 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:57614",
       "sslPort": 44343
+    }
+  }
+}
+*/
+{
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5000"
+    },
+    "https": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:5001"
     }
   }
 }
