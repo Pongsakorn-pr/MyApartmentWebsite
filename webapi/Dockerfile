@@ -6,8 +6,8 @@ EXPOSE 5000
 # Use the SDK image to build the application (Linux-based)
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["webapi/webapi.csproj", "webapi/"]
-RUN dotnet restore "webapi/webapi.csproj"
+COPY ["webapi.csproj", "webapi/"]
+RUN dotnet restore "webapi.csproj"
 COPY . . 
 WORKDIR "/src/webapi"
 RUN dotnet build "webapi.csproj" -c Release -o /app/build
