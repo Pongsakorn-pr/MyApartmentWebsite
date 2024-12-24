@@ -1,16 +1,12 @@
 using webapi.Model;
 
 var builder = WebApplication.CreateBuilder(args);
-/*
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-if (builder.Environment.IsProduction())
+builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    builder.WebHost.ConfigureKestrel(serverOptions =>
-    {
-        serverOptions.ListenAnyIP(int.Parse(port)); // HTTP only
-    });
-}
-*/
+    serverOptions.ListenAnyIP(int.Parse(port));
+});
+
 // Enable CORS with a policy to allow requests from your React app
 
 // Add services to the container.
