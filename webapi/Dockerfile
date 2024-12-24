@@ -6,10 +6,18 @@ EXPOSE 5000
 # Use the SDK image to build the application (Linux-based)
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["webapi.csproj", "webapi/"]
-RUN dotnet restore "webapi/webapi.csproj"
+
+# Copy the project file to the container's /src directory
+COPY webapi.csproj ./  # Make sure the correct path is used for your project file
+RUN dotnet restore "webapi.csproj"  # Restore project dependencies
+
+# Copy the rest of the application code into the container
 COPY . . 
-WORKDIR "/src/webapi"
+
+# Set working directory to the folder containing the project file
+WORKDIR /src
+
+# Build the project in Release mode
 RUN dotnet build "webapi.csproj" -c Release -o /app/build
 
 # Publish the application
@@ -19,5 +27,5 @@ RUN dotnet publish "webapi.csproj" -c Release -o /app/publish /p:UseAppHost=fals
 # Final image, set the entry point for the application (Linux-based)
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish .  # Copy the published output from the publish step
 ENTRYPOINT ["dotnet", "webapi.dll"]
