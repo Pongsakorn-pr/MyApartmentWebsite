@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeftSquare } from 'react-bootstrap-icons';
 const EditDataPage = () => {
     const { state } = useLocation(); // Get data passed from the previous page
@@ -35,21 +35,16 @@ const EditDataPage = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (event,item) => {
         e.preventDefault();
         try {
             // Adjust the API URL as needed
-            await axios.put(`https://webapiforproperly.azurewebsites.net/api/Apartment/${formData.bill_id+1}`, formData);
-            console.log("Data updated", formData);
-            navigate('/data');  // Navigate back to the data list page after updating
+            await axios.put(`https://webapiforproperly.azurewebsites.net/api/Apartment/${formData.bill_id+1}`, item);
+            console.log("Data updated", item);
         } catch (error) {
             console.error("Error editing data:", error);
         }
     };
-    const backPage = (e) => {
-        navigate('/data')
-    };
-
     return (
         <div>
             <h1>แก้ไขข้อมูล</h1>
@@ -169,10 +164,10 @@ const EditDataPage = () => {
                 </Form.Group>
                 {/* Add other fields as needed */}
                 <div style={{ marginTop: '20px' }}>
-                    <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={handleSubmit} >
+                    <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={(event) => handleSubmit(event, formData)} >
                         Save Changes
                     </Button>
-                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }} onClick={backPage} ><ArrowLeftSquare /></Button>
+                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }}><Link to="/"><ArrowLeftSquare /></Link></Button>
                 </div>
             </Form>
         </div>
