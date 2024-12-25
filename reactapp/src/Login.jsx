@@ -39,8 +39,8 @@ const LoginPage = ({ onLogin }) => {
             navigate('/data');  // Redirect to /data page after login
 
         } catch (error) {
-            if (error.response.status == 401) {
-                setErrorMessage(error.response.data[0].message);
+            if (error.response.statusText == "Unauthorized") {
+                setErrorMessage(error.response.data.message);
             } else if (error.request) {
                 setErrorMessage('Network error: Please try again later.');
             } else {
