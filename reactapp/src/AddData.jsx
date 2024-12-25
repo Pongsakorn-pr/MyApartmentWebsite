@@ -96,6 +96,7 @@ const AddDataPage = () => {
             console.log(item);
             const respon = await axios.post(`https://webapiforproperly.azurewebsites.net/api/Apartment`, item);
             if (respon.ok) {
+                backPage();
                 console.log("Successful");
             }
         } catch (error) {
