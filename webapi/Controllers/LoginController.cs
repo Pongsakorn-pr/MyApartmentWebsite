@@ -21,7 +21,7 @@ namespace webapi.Controllers
                 }
                 else
                 {
-                    return Unauthorized(new { message = "Invalid credentials." });
+                    return Ok(new { message = "Invalid credentials." });
                 }
             }
             catch (Exception ex)

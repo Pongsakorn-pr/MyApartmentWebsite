@@ -39,8 +39,8 @@ const LoginPage = ({ onLogin }) => {
             navigate('/data');  // Redirect to /data page after login
 
         } catch (error) {
-            if (error.response) {
-                setErrorMessage('Server error: ' + error.response.data);
+            if (error.response.status == 401) {
+                setErrorMessage(error.response.data[0].message);
             } else if (error.request) {
                 setErrorMessage('Network error: Please try again later.');
             } else {
