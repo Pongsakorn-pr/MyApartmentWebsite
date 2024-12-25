@@ -8,6 +8,7 @@ const AddDataPage = () => {
     const navigate = useNavigate();
     const currentDate = new Date();
     const [dis, setdis] = useState(true);
+    const [formData, setFormData] = useState([]);
     var DefaultDataObject = {
         bill_id: 1,
         room_number: '',
@@ -25,11 +26,8 @@ const AddDataPage = () => {
         BAHT: '',
         Month_TH: ''
     };
-    const [formData, setFormData] = useState(DefaultDataObject);
-    const backPage = () => {
-        navigate('/data', { replace: true }); // Ensures no query parameters are carried over
-    };
     useEffect(() => {
+        setFormData(DefaultDataObject);
         if (state && state.data) {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -89,14 +87,20 @@ const AddDataPage = () => {
             console.log(JSON.stringify(formData));
         }
     };
-    const sumbitAddata = async (item) => {
+    const submitData = async (event, item) => {
         try {
             item.BAHT = '=BAHTTEXT(' + item.total_amount + ')';
             item.Month_TH = '=TEXT((' + item.bill_month_year + '), "MMMM") & " " & TEXT(' + (item.Year+543) + ', "0")';
             console.log(item);
             const respon = await axios.post(`https://webapiforproperly.azurewebsites.net/api/Apartment`, item);
-            if (respon.ok) {
+            console.log(respon);
+            if (respon.status === 201) {
                 console.log("Successful");
+                // Reset the data to default
+                var newDataObject = DefaultDataObject;
+                newDataObject.bill_id = item.bill_id + 1;
+                setdis(true);
+                setFormData(newDataObject);
             }
         } catch (error) {
             console.error("Error insert Data:", error);
@@ -234,10 +238,10 @@ const AddDataPage = () => {
                 </Form.Group>
                 {/* Add other fields as needed */}
                 <div style={{ marginTop: '20px' }}>
-                    <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={() => sumbitAddata(formData)}>
+                    <Button variant="primary" type="button" style={{ marginTop: '10px' }} onClick={(event) => submitData(event, formData)}>
                         Save
                     </Button>
-                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }}> <Link to="/" ><ArrowLeftSquare style={{ color: 'white' }} /></Link></Button>
+                    <Button variant="danger" type="button" style={{ marginTop: '10px', float: 'right' }}> <Link to="/" ><ArrowLeftSquare style={{ color: 'white' }} /></Link></Button>
                 </div>
             </Form>
         </div>

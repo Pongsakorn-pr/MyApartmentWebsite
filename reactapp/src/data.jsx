@@ -39,7 +39,7 @@ const DataPage = () => {
             // Update UI/state in the parent component (e.g., remove the deleted item from the list)
             // You can achieve this by passing a function to the deleteData function
             // to update the state in the parent component.
-            window.location.reload();
+            navigate('/');
         } catch (error) {
             console.error("Error deleting data:", error);
             // Display an error message to the user 
