@@ -96,7 +96,6 @@ const AddDataPage = () => {
             console.log(item);
             const respon = await axios.post(`https://webapiforproperly.azurewebsites.net/api/Apartment`, item);
             if (respon.ok) {
-                backPage();
                 console.log("Successful");
             }
         } catch (error) {
@@ -238,7 +237,7 @@ const AddDataPage = () => {
                     <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={() => sumbitAddata(formData)}>
                         Save
                     </Button>
-                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }} onClick={backPage}> <Link to="/" ><ArrowLeftSquare style={{ color: 'white' }} /></Link></Button>
+                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }}> <Link to="/" ><ArrowLeftSquare style={{ color: 'white' }} /></Link></Button>
                 </div>
             </Form>
         </div>
