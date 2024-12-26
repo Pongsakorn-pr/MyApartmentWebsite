@@ -52,7 +52,7 @@ namespace webapi.Model
 
             foreach (var value in values)
             {
-                if (string.IsNullOrEmpty(value[0].ToString()))
+                if (value.Count == 0)
                 {
                     continue;
                 }
