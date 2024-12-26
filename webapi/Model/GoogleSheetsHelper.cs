@@ -47,17 +47,19 @@ namespace webapi.Model
 
             if (values.Count == 0)
             {
-                return items; // Early return for empty input
+                return items; 
             }
 
             foreach (var value in values)
             {
+                if (string.IsNullOrEmpty(value[0].ToString()))
+                {
+                    continue;
+                }
                 Apartment item = new Apartment();
-
-                // Robust parsing with error handling
                 if (!int.TryParse(value[0]?.ToString(), out int billId))
                 {
-                    continue; // Or skip this item
+                    continue; 
                 }
                 item.bill_id = billId;
                 item.bill_month_year = !string.IsNullOrEmpty(value[2].ToString()) ? value[2].ToString() : string.Empty;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button} from 'react-bootstrap';
 import axios from 'axios';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeftSquare } from 'react-bootstrap-icons';
@@ -164,10 +164,10 @@ const EditDataPage = () => {
                 </Form.Group>
                 {/* Add other fields as needed */}
                 <div style={{ marginTop: '20px' }}>
-                    <Button variant="primary" type="submit" style={{ marginTop: '10px' }} onClick={(event) => handleSubmit(event, formData)} >
+                    <Button variant="primary" type="button" style={{ marginTop: '10px' }} onClick={(event) => handleSubmit(event, formData)} >
                         Save Changes
                     </Button>
-                    <Button variant="danger" type="submit" style={{ marginTop: '10px', float: 'right' }}><Link to="/"><ArrowLeftSquare /></Link></Button>
+                    <Button variant="danger" type="button" style={{ marginTop: '10px', float: 'right' }}><Link to="/"><ArrowLeftSquare /></Link></Button>
                 </div>
             </Form>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Modal, Alert } from 'react-bootstrap';
 import { PencilSquare, Trash, Printer, HouseAdd } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,6 +10,13 @@ const DataPage = () => {
     const [error, setError] = useState(null);
     const [count, setCount] = useState(0);
     const navigate = useNavigate();
+    const [tempData, setDatatmp] = useState([]);
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = (item) => {
+        setDatatmp(item);
+        setShow(true);
+    };
     const downloadPdf = async (item) => {
         var requestRowIndex = {
             rowIndex: item.bill_id
@@ -34,11 +41,7 @@ const DataPage = () => {
         try {
             // Use the actual ID of the item
             var id = item.bill_id + 1;
-            await axios.delete(`https://webapiforproperly.azurewebsites.net/api/Apartment/${id}`);
-            console.log("Data Deleted:", item);
-            // Update UI/state in the parent component (e.g., remove the deleted item from the list)
-            // You can achieve this by passing a function to the deleteData function
-            // to update the state in the parent component.
+           await axios.delete(`https://webapiforproperly.azurewebsites.net/api/Apartment/${id}`);
             navigate('/');
         } catch (error) {
             console.error("Error deleting data:", error);
@@ -46,17 +49,13 @@ const DataPage = () => {
         }
     };
     const NavAddData = (count) => {
-        console.log(count);
         navigate('/AddData', { state: {data : count } });
     }
     const handleEdit = (item) => {
-        console.log(item);
         navigate(`/Edit/${item.bill_id}`, { state: { data: item } });
-        console.log(item.bill_id);
     };
     useEffect(() => {
-        // Fetch data from the backend API
-        fetch("https://webapiforproperly.azurewebsites.net/api/Apartment") // Adjust API URL accordingly
+        fetch("https://webapiforproperly.azurewebsites.net/api/Apartment") 
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
@@ -64,7 +63,6 @@ const DataPage = () => {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 if (data.length > 0) {
                     setCount(data[1]);
                     setData(data[0]); // Set the data in the state
@@ -77,8 +75,8 @@ const DataPage = () => {
                 setError(error.message); // Handle errors
             });
     }, []);
-
     return (
+        // Div for Alert Box
         <div className="container mt-4">
             <div className="d-flex justify-content-between mb-4">
                 <h1>ข้อมูลหอพักทั้งหมด</h1>
@@ -89,7 +87,20 @@ const DataPage = () => {
                     alt= "Add Data"
                     style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={() => NavAddData(count)}><HouseAdd /></Button>
             </div>
-
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Deleting</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure to delete this data</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={() => deleteData(tempData)}>
+                        Delete
+                    </Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Table striped bordered hover responsive >
                 <thead className="table-dark" >
                     <tr>
@@ -139,7 +150,8 @@ const DataPage = () => {
                                         className="me-2"
                                         size="lg"
                                         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                                        onClick={() => deleteData(item)}
+                                        onClick={() => handleShow(item)}
+                                        /*onClick={() => deleteData(item)}*/
                                     >
                                         <Trash />
                                     </Button>

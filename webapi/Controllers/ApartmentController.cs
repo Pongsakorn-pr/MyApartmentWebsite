@@ -57,9 +57,19 @@ public class ApartmentController : ControllerBase
         var response = request.Execute();
         var values = response.Values;
         var allData = ItemsMapper.MapFromRangeData(values);
-        var filter = allData.Where
-            (x => x.room_number == reqData.room_number && x.Month == reqData.Month && x.Year == reqData.Year).Select(a => new { a.water_reading_meter }).ToList();
-        return Ok(filter);
+        if (reqData.Month == 1)
+        {
+            var filter = allData.Where
+                (x => x.room_number == reqData.room_number && x.Month == 1 && x.Year == reqData.Year-1).Select(a => new { a.water_reading_meter }).ToList();
+            return Ok(filter);
+        }
+        else
+        {
+            var filter = allData.Where
+                (x => x.room_number == reqData.room_number && x.Month == reqData.Month - 1 && x.Year == reqData.Year).Select(a => new { a.water_reading_meter }).ToList();
+            return Ok(filter);
+        }
+
     }
     [HttpPost]
     public IActionResult Post([FromBody] Apartment item)
@@ -106,15 +116,19 @@ public class ApartmentController : ControllerBase
         var request = _googleSheetValues.Get(SPREADSHEET_ID, range);
         var response = request.Execute();
         var values = response.Values;
-        Apartment item = ItemsMapper.MapFromRangeData(values).FirstOrDefault();
-        // Create a MemoryStream to hold the generated PDF data
         try
         {
+            var item = ItemsMapper.MapFromRangeData(values).FirstOrDefault();
+            if (item == null)
+            {
+                return NotFound("Apartment not found.");
+            }
             BillAparment billAparment = new BillAparment();
             byte[] pdfBytes = billAparment.PrintBillPdf(item);
 
             // Return the PDF file as a response
             return File(pdfBytes, "application/pdf", $"Bill_{item.bill_id}.pdf");
+
         }
         catch (Exception ex)
         {
