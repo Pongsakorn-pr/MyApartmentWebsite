@@ -22,7 +22,7 @@ const AddDataPage = () => {
         water_diff: 0,
         total_amount: 0,
         Month: currentDate.getMonth() + 1,
-        Year: currentDate.getFullYear(),
+        Year: currentDate.getFullYear()+543,
         BAHT: '',
         Month_TH: ''
     };
@@ -42,7 +42,7 @@ const AddDataPage = () => {
                 const dataObj = {
                     room_number: value,
                     month: currentDate.getMonth(), // Months are zero-indexed
-                    year: currentDate.getFullYear()
+                    year: currentDate.getFullYear()+543
                 };
                 console.log(dataObj);
                 const respon = await axios.post(`https://webapiforproperly.azurewebsites.net/api/Apartment/oldMeter`, dataObj);
